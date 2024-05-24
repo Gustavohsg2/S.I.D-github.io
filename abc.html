@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frontend para API</title>
+</head>
+<body>
+  <h1>Envio de Solicitação POST para a API</h1>
+
+  <form id="formulario">
+    <button type="submit">Obter Segundo Membro</button>
+  </form>
+
+  <div id="resultado"></div>
+
+  <script>
+    document.getElementById('formulario').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      // Faz uma solicitação POST para a API
+      fetch('http://localhost:3000/api', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+        const segundoMembro = data.segundoMembro;
+
+        if (segundoMembro) {
+          document.getElementById('resultado').innerHTML = `
+            <h2>Informações do Segundo Membro</h2>
+            <p><strong>Nome:</strong> ${segundoMembro.name}</p>
+            <p><strong>Idade:</strong> ${segundoMembro.age}</p>
+            <p><strong>Identidade Secreta:</strong> ${segundoMembro.secretIdentity}</p>
+            <p><strong>Poderes:</strong> ${segundoMembro.powers.join(', ')}</p>
+          `;
+        } else {
+          document.getElementById('resultado').innerHTML = '<p>Segundo membro não encontrado.</p>';
+        }
+      })
+      .catch(error => {
+        console.error('Erro:', error);
+        document.getElementById('resultado').innerHTML = '<p>Ocorreu um erro ao enviar a solicitação.</p>';
+      });
+    });
+  </script>
+</body>
+</html>
